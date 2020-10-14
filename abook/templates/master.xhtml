@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="${response.charset}" />
+
+  <title py:block="master_title">Address Book</title>
+  <link rel="stylesheet" type="text/css" media="screen" href="${tg.url('/css/style.css')}" />
+  <link rel="stylesheet" type="text/css" media="screen" href="${tg.url('/css/bootstrap.min.css')}" />
+  <script src="http://code.jquery.com/jquery.js"></script>
+  <script src="${tg.url('/javascript/bootstrap.min.js')}"></script>
+  <py:block name="head"></py:block>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-default">
+
+    <div class="collapse navbar-collapse" id="navbar-content">
+      <ul py:if="tg.auth_stack_enabled" class="nav navbar-nav navbar-right">
+        <li py:if="not request.identity"><a href="${tg.url('/login')}">Login</a></li>
+        <li py:if="request.identity"><a href="${tg.url('/logout_handler')}">Logout</a></li>
+        <li py:if="request.identity"><a href="${tg.url('/contacts')}">Contacts</a></li>
+      </ul>
+    </div>
+  </nav>
+
+
+  <div class="container">
+    <!-- Flash messages -->
+    <py:with vars="flash=tg.flash_obj.render('flash', use_js=False)">
+      <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+          <div py:if="flash" py:replace="Markup(flash)" />
+        </div>
+      </div>
+    </py:with>
+
+    <!-- Main included content -->
+    <py:block name="body"></py:block>
+  </div>
+
+  <!-- Footer -->
+</body>
+</html>

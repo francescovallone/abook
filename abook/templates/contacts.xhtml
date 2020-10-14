@@ -1,0 +1,55 @@
+<html py:extends="master.xhtml" py:strip="True">
+    <head py:block="head" py:strip="True">
+        <title py:block="master_title">Your Contacts</title>
+    </head>
+
+    <body py:block="body" py:strip="True">
+        <h2>${username} <span class="badge badge-secondary">${contact_lenght}</span></h2>
+        <a py:if="request.identity" class="btn btn-primary" href="${tg.url('/add_contact')}">Add Contact</a>
+        <a py:if="request.identity" class="btn btn-secondary" href="${tg.url('/export_contacts')}">Export Contact</a>
+      <div class="row" style="margin-top: 16px">
+        <div class="col-md-12">
+            <div class="list-group" py:for="item in items">
+              <div class="list-group-item list-group-item-action flex-column align-items-start active">
+                <h3 class="mb-1">${item['name']}</h3>
+                <p class="mb-1">${item['phone']}</p>
+                <a class="openDeleteDialog btn btn-danger" data-contact-name="${item['name']}" data-toggle="modal" data-target="#deleteForm" data-id="${item['contact_id']}" py:if="request.identity">Delete</a>
+              </div>
+            </div>
+        </div>
+      </div>
+      <div class="modal" tabindex="-1" role="dialog" id="deleteForm">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Delete Contact</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <p>Do you want to delete <span id="contactName"></span></p>
+                ${form.display()}
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <script>
+          $(".openDeleteDialog").on("click", function () {
+            console.log($(".openDeleteDialog").data('href'));
+            var contact_id = $(this).data('id');
+            var name = $(this).data('contact-name');
+            console.log(name);
+            $(".modal-body #contact_name").text(name);
+            $(".modal-body p #contactName").text(name);
+            $(".modal-body #contact_id").val( contact_id );
+            // As pointed out in comments, 
+            // it is unnecessary to have to manually call the modal.
+            // $('#addBookDialog').modal('show');
+        });
+      </script>
+    </body>
+</html>
