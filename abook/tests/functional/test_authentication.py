@@ -73,36 +73,10 @@ class TestAuthentication(TestController):
         form['contact_name'] = "Test Contact"
         form['contact_id'] = 2
         post_remove = form.submit(status=302)
-        ok_(post_add.location.startswith('http://localhost/delete_contact'))
-        eq_(post_add.location, 'http://localhost/contacts')
-        ok_("Test Contact" not in resp)    def test_remove_contact(self):
-        resp = self.app.get('/login', status=200)
-        form = resp.form
-        # Submitting the login form:
-        form['login'] = 'francesco'
-        form['password'] = 'managepass'
-        post_login = form.submit(status=302)
-        # Being redirected to the home page:
-        ok_(post_login.location.startswith('http://localhost/post_login'))
-        home_page = post_login.follow(status=302)
-        ok_('authtkt' in home_page.request.cookies,
-            'Session cookie was not defined: %s' % home_page.request.cookies)
-        eq_(home_page.location, 'http://localhost/')
-        resp = self.app.get('/add_contact', status=200)
-        form = resp.form
-        form['name'] = "Test Contact"
-        form['number'] = "3510589682"
-        post_add = form.submit(status=302)
-        ok_(post_add.location.startswith('http://localhost/contacts'))
-        eq_(post_add.location, 'http://localhost/contacts')
-        resp = self.app.get('/contacts', status=200)
-        form = resp.form
-        form['contact_name'] = "Test Contact"
-        form['contact_id'] = 2
-        post_remove = form.submit(status=302)
-        ok_(post_add.location.startswith('http://localhost/delete_contact'))
-        eq_(post_add.location, 'http://localhost/contacts')
-        ok_("Test Contact" not in resp)
+        ok_(post_remove.location.startswith('http://localhost/contacts'))
+        eq_(post_remove.location, 'http://localhost/contacts')
+        contact = model.DBSession.query(model.Contact).filter_by(contact_id=2).first()
+        eq_(contact, None)
 
 
     def test_list_contact(self):

@@ -56,7 +56,6 @@ class RootController(BaseController):
             logged = DBSession.query(model.User).filter(model.User.user_name == request.identity['repoze.who.userid']).first()
             items = [{'contact_id': item.contact_id, 'name':item.display_name,'phone':item.phone_number} for item in logged.address_book]
             """Handle the front-page."""
-            print(items)
             return dict(form=DeleteContactForm,items=items, username=logged.user_name, contact_lenght=len(items))
         else:
             redirect('/')
