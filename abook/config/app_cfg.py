@@ -66,18 +66,18 @@ class ApplicationAuthMetadata(TGAuthMetadata):
         user = self.dbsession.query(self.user_class).filter_by(
             user_name=login
         ).first()
-        print(user)
         if not user:
             user = self.dbsession.query(self.user_class).filter_by(
                 email=login
             ).first()
-            print(user)
             if not user:
                 login = None
             elif not user.validate_password(identity['password']):
                 login = None
         elif not user.validate_password(identity['password']):
             login = None
+
+        login = user.user_name
         if login is None:
             try:
                 from urllib.parse import parse_qs, urlencode
@@ -105,10 +105,6 @@ class ApplicationAuthMetadata(TGAuthMetadata):
         user = self.dbsession.query(self.user_class).filter_by(
             user_name=userid
         ).first()
-        if not user:
-            user = self.dbsession.query(self.user_class).filter_by(
-                email=userid
-            ).first()
         return user
 
     def get_contacts(self, identity, userid):

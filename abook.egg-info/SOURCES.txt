@@ -47,9 +47,7 @@ abook/templates/__pycache__/__init__.cpython-38.pyc
 abook/tests/__init__.py
 abook/tests/functional/__init__.py
 abook/tests/functional/test_authentication.py
-abook/tests/functional/test_root.py
 abook/tests/models/__init__.py
-abook/tests/models/test_auth.py
 abook/websetup/__init__.py
 abook/websetup/bootstrap.py
 abook/websetup/schema.py

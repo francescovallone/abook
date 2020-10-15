@@ -53,9 +53,7 @@ class RootController(BaseController):
     @expose('abook.templates.contacts')
     def contacts(self):
         if request.identity:
-            logged = DBSession.query(model.User).filter(model.User.user_name.in_([request.identity['repoze.who.userid']])).first()
-            if not logged:
-                logged = DBSession.query(model.User).filter(model.User.email == request.identity['repoze.who.userid']).first()
+            logged = DBSession.query(model.User).filter(model.User.user_name == request.identity['repoze.who.userid']).first()
             items = [{'contact_id': item.contact_id, 'name':item.display_name,'phone':item.phone_number} for item in logged.address_book]
             """Handle the front-page."""
             print(items)
@@ -80,9 +78,7 @@ class RootController(BaseController):
         c.display_name = kw['name']
         c.phone_number = kw['number']
         DBSession.add(c)
-        logged = DBSession.query(model.User).filter(model.User.user_name.in_([request.identity['repoze.who.userid']])).first()
-        if not logged:
-            logged = DBSession.query(model.User).filter(model.User.email == request.identity['repoze.who.userid']).first()
+        logged = DBSession.query(model.User).filter(model.User.user_name == request.identity['repoze.who.userid']).first()
         logged.address_book.append(c)
         DBSession.add(logged)
         DBSession.flush()
@@ -102,8 +98,6 @@ class RootController(BaseController):
     @expose('json')
     def export_contacts(self):
         logged = DBSession.query(model.User).filter(model.User.user_name == request.identity['repoze.who.userid']).first()
-        if not logged:
-            logged = DBSession.query(model.User).filter(model.User.email == request.identity['repoze.who.userid']).first()
         data = {'user': logged.user_name, 'contacts': [{'contact_name':item.display_name,'contact_number':item.phone_number} for item in logged.address_book]}
         return data
 
